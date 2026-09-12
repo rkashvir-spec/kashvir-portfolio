@@ -1,3 +1,39 @@
+/* ==================== SCROLL ANIMATIONS ==================== */
+/* Core state for elements before they enter the screen view */
+.hidden-animation {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateY(4rem);
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Modifiers for custom directional entry */
+.hidden-left {
+    transform: translateX(-6rem);
+}
+
+.hidden-right {
+    transform: translateX(6rem);
+}
+
+/* Activated state triggered dynamically via JavaScript */
+.show-animation {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0) translateY(0);
+}
+
+/* Adds sequential staggered delays for groups (like grids of project cards) */
+.services-container .service-box:nth-child(2),
+.projects-box .project-card:nth-child(2) { transition-delay: 0.15s; }
+
+.services-container .service-box:nth-child(3),
+.projects-box .project-card:nth-child(3) { transition-delay: 0.3s; }
+
+.projects-box .project-card:nth-child(4) { transition-delay: 0.15s; }
+.projects-box .project-card:nth-child(5) { transition-delay: 0.3s; }
+.projects-box .project-card:nth-child(6) { transition-delay: 0.45s; }
+
 * {
     margin: 0;
     padding: 0;
@@ -13,8 +49,15 @@
     --main-color: #729966;
 }
 
+.dark-mode {
+    --bg-color: #121b15;         /* Deep dark forest charcoal */
+    --second-bg-color: #1b2a20;  /* Slightly lighter charcoal for secondary blocks */
+    --text-color: #f1f7f3;        /* Soft crisp off-white text */
+    --main-color: #8bb37e;        /* Brighter green for better visibility on dark backgrounds */
+}
+
 html {
-    font-size: 60%;
+    font-size: 62.5%;
     overflow-x: hidden;
     scroll-padding-top: 7.5rem; 
 }
@@ -32,7 +75,7 @@ body {
     width: 100%;
     top: 0;
     left: 0;
-    padding: 2rem 15%;
+    padding: 2rem 10%;
     background: #72996685;
     backdrop-filter: blur(10px);
     display: flex;
@@ -46,6 +89,29 @@ body {
     color: var(--main-color);
     cursor: pointer;
     display: none;
+}
+
+/* HEADER ICONS CONTAINER */
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    order: 2; /* Keeps icons safely positioned together */
+}
+
+/* Style the dark mode icon inside your header styling section */
+#darkmode-icon {
+    font-size: 2.4rem;
+    color: var(--text-color);
+    cursor: pointer;
+    margin-left: auto; /* Pushes it beautifully next to the burger menu on mobile */
+    margin-right: 2.5rem;
+    transition: 0.3s ease;
+}
+
+#darkmode-icon:hover {
+    color: var(--main-color);
+    transform: scale(1.1);
 }
 
 .logo {
@@ -110,7 +176,7 @@ span {
 
 section {
     min-height: 100vh;
-    padding: 10rem 15%;
+    padding: 14rem 10% 10rem; /* Increased top padding to prevent fixed header coverage */
 }
 
 .home {
@@ -123,7 +189,7 @@ section {
 .home-content {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: flex-start;
     text-align: right;
 }
 
@@ -292,14 +358,17 @@ section {
 
 .service-box {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: var(--main-color);
-    height: 600px;
+    color: white;
+    min-height: 450px; /* Swapped absolute height for fluid height container boundaries */
     border-radius: 3rem;
     cursor: pointer;
-    border: 5px solid transparent;
+    border: 3px solid transparent;
     transition: 0.4s ease-in-out;
+    padding: 4rem 3rem;
 }
 
 .service-box:hover {
@@ -379,7 +448,10 @@ section {
 }
 
 .project-card p {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    flex-grow: 1; /* Automatically keeps bottom action buttons vertically aligned */
 }
 
 /* CONTACT */ 
@@ -450,47 +522,68 @@ section {
     font-size: 16px;
 }
 
-@media (max-width: 1285px) {
+/* ==========================================================================
+   📱 RESPONSIVE MEDIA QUERIES (STYLING FOR DIFFERENT DEVICES)
+   ========================================================================== */
+
+/* 💻 1. Large Laptops / Small Desktops (max-width: 1200px) */
+@media (max-width: 1200px) {
     html {
-        scroll-padding-top: 8rem;
+        font-size: 55%; /* Scales down all rem measurements globally */
     }
+    .header {
+        padding: 2rem 5%;
+    }
+    section {
+        padding: 12rem 5% 8rem;
+    }
+    .home {
+        gap: 5rem;
+    }
+}
 
+/* 📜 2. Tablets / IPads Landscapes (max-width: 991px) */
+@media (max-width: 991px) {
     #menu-icon {
-        display: block;
+        display: block; /* Hamburger icon turns on */
     }
 
+    .header-right .gradient-btn {
+        display: none; /* Hides top corner static button to save screen area */
+    }
+
+    /* Transform navigation row into a slick, sliding vertical mobile menu drawer */
     .navbar {
         position: absolute;
         top: 100%;
-        right: 0;
-        width: 50%;
-        padding: 1rem 3rem;
-        background: #57754e85;
-        border-bottom-left-radius: 2rem;
-        border-left: 2px solid var(--main-color);
-        border-bottom: 2px solid var(--main-color);
-        display: none;
-    }
-
-    .navbar a {
-        display: block;
-        font-size: 2rem;
-        margin: 3rem 0;
-        color: var(--text-color);
+        left: -100%;
+        width: 100%;
+        padding: 3rem 5%;
+        background: var(--bg-color);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2.5rem;
+        transition: 0.4s ease;
     }
 
     .navbar.active {
-        display: block;
+        left: 0; /* Menu sliding transition code */
     }
 
-    .gradient-btn {
-        display: none;
+    .navbar a {
+        margin-left: 0;
+        font-size: 2.2rem;
+        width: 100%;
     }
 
+    /* Stack flex elements vertically */
     .home {
         flex-direction: column-reverse;
-        margin: 5rem 0;
-        gap: 5rem;
+        text-align: center;
+        gap: 4rem;
     }
 
     .home-content {
@@ -498,25 +591,90 @@ section {
         text-align: center;
     }
 
-    .home-img img {
-        width: 56vw;
+    .home-content h1 {
+        font-size: 6.5rem;
+    }
+
+    .home-img img, 
+    .about-img img {
+        width: 45vw;
+        height: 45vw; /* Maintain perfect square boundaries for perfect circles */
     }
 
     .about {
-        flex-direction: column-reverse;
+        flex-direction: column;
         text-align: center;
+        gap: 4rem;
     }
 
-    .about h2 {
+    .about-content h2 {
         text-align: center;
-        margin: 2rem 0;
+        font-size: 6rem;
     }
 
-    .about img {
-        width: 52vw;
+    .heading {
+        font-size: 6rem;
+    }
+}
+
+/* 📲 3. Small Tablets / Large Mobile Portrait Screens (max-width: 768px) */
+@media (max-width: 768px) {
+    html {
+        font-size: 50%;
     }
 
-    .contacts form {
-        display: inline;
+    .home-img img, 
+    .about-img img {
+        width: 55vw;
+        height: 55vw;
+    }
+
+    .services-container,
+    .projects-box {
+        grid-template-columns: 1fr; /* Force cards into a singular stacked layout */
+        max-width: 45rem;
+        margin: 0 auto;
+    }
+    
+    /* Convert horizontal side-by-side inputs into fluid block inputs */
+    .contacts form .input-group {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}
+
+/* 📱 4. Ultra-Small Mobile Devices / iPhone SE (max-width: 450px) */
+@media (max-width: 450px) {
+    .header {
+        padding: 2rem 4%;
+    }
+    
+    .logo {
+        font-size: 2.6rem;
+    }
+
+    .home-content h1 {
+        font-size: 5rem;
+    }
+
+    .home-content h3 {
+        font-size: 2.8rem;
+    }
+
+    .home-img img, 
+    .about-img img {
+        width: 70vw;
+        height: 70vw;
+    }
+    
+    .btn-group {
+        width: 100%;
+        flex-direction: column; /* Stacks button options on top of each other */
+        gap: 1rem;
+    }
+    
+    .btn {
+        width: 100%;
+        text-align: center;
     }
 }
