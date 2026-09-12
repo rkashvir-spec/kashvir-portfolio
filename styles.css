@@ -515,4 +515,8 @@ section {
     .about img {
         width: 52vw;
     }
+
+    .contacts form {
+        display: inline;
+    }
 }
