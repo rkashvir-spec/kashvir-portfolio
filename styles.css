@@ -618,30 +618,81 @@ section {
 }
 
 /* 📲 3. Small Tablets / Large Mobile Portrait Screens (max-width: 768px) */
+/* ==================== RESPONSIVE MOBILE NAVBAR ==================== */
 @media (max-width: 768px) {
-    html {
-        font-size: 50%;
+    .header {
+        padding: 2rem 5%; 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
-    .home-img img, 
-    .about-img img {
-        width: 55vw;
-        height: 55vw;
+    /* 1. Reveal the burger menu icon */
+    #menu-icon {
+        display: block; 
+        order: 3; /* Places burger button at the very right */
     }
 
-    .services-container,
-    .projects-box {
-        grid-template-columns: 1fr; /* Force cards into a singular stacked layout */
-        max-width: 45rem;
-        margin: 0 auto;
+    /* 2. Group and align the dark mode icon beautifully with the burger */
+    .header-icons {
+        gap: 1.5rem;
+        order: 2;
+        margin-left: auto; /* Pushes the entire icon group rightward, next to the burger */
     }
-    
-    /* Convert horizontal side-by-side inputs into fluid block inputs */
-    .contacts form .input-group {
+
+    #darkmode-icon {
+        margin-right: 0; /* Clear the large 2.5rem desktop margin causing off-center alignments */
+    }
+
+    /* 3. Hide the desktop navbar and turn it into a mobile dropdown layout */
+    .navbar {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding: 1rem 5%;
+        background: var(--second-bg-color);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        display: none; /* Hidden by default; toggle this to 'flex' using JavaScript */
         flex-direction: column;
         gap: 1.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dynamic class to reveal the menu when active */
+    .navbar.active {
+        display: flex;
+    }
+
+    .navbar a {
+        font-size: 2rem;
+        margin-left: 0; /* Strips desktop side-margins */
+        padding: 1rem 0;
+        display: block;
+        width: 100%;
+    }
+
+    /* Prevent the logo from shrinking or breaking lines */
+    .logo {
+        font-size: 2.5rem; /* Slightly smaller for mobile safety */
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* HIDE the desktop version of the gradient button on phone screens */
+    .header > .gradient-btn {
+        display: none; 
+    }
+
+    /* OPTIONAL: Move the gradient button inside the mobile navbar dropdown instead */
+    .navbar .gradient-btn {
+        display: inline-block;
+        text-align: center;
+        margin-top: 1rem;
+        width: 100%; /* Makes it a nice full-width mobile button */
     }
 }
+
 
 /* 📱 4. Ultra-Small Mobile Devices / iPhone SE (max-width: 450px) */
 @media (max-width: 450px) {
